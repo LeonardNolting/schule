@@ -22,11 +22,11 @@ class Node<D : Data>(
 	/**
 	 * = in Funktionen:
 	 * Folgende Funktionen sind gleich:
-	 *
+	 * ```
 	 * fun foo(): String { return "bar" }
 	 * fun foo(): String = "bar"
 	 * fun foo() = "bar" // type inference
-	 *
+	 * ```
 	 * @return Element of type [D] or null if no element with that key can be found.
 	 */
 	fun find(key: String): D? =

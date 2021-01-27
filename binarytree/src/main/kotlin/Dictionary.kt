@@ -7,7 +7,7 @@ class Dictionary(
 ) : BinaryTree<Word>(words) {
 	/**
 	 * Sekundärer Konstruktor (overload)
-	 * @param words Liste aus Wörtern
+	 *
 	 * Beispiel:
 	 * ```
 	 * Dictionary(
@@ -15,6 +15,7 @@ class Dictionary(
 	 *     "world" to "Synonym for earth"
 	 * )
 	 * ```
+	 * @param words Liste aus Wörtern
 	 */
 	constructor(
 		vararg words: Pair<String, String>
