@@ -10,7 +10,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/binarytree" />
-            <option value="$PROJECT_DIR$/binärbaum" />
             <option value="$PROJECT_DIR$/liste" />
           </set>
         </option>

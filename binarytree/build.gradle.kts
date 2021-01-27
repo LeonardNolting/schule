@@ -12,3 +12,8 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
 }
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.freeCompilerArgs =
+        listOf("-Xopt-in=kotlin.ExperimentalUnsignedTypes", "-Xopt-in=kotlin.ExperimentalStdlibApi")
+}

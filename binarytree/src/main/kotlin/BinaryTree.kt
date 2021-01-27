@@ -1,5 +1,5 @@
 
-import java.util.ArrayList
+import java.util.*
 import kotlin.math.ceil
 import kotlin.math.floor
 
@@ -7,8 +7,16 @@ import kotlin.math.floor
 open class BinaryTree<D : Data>(
 	data: List<D>
 ) {
-	constructor(root: D): this(listOf(root))
-	constructor(vararg data: D): this(data.toList())
+	/**
+	 * BinaryTree with one initial node
+	 */
+	constructor(root: D) : this(listOf(root))
+
+	/**
+	 * BinaryTree with several initial nodes
+	 */
+	constructor(vararg data: D) : this(data.toList())
+
 	init {
 		@Suppress("LeakingThis")
 		for (singleData in data) this += singleData
@@ -18,6 +26,10 @@ open class BinaryTree<D : Data>(
 		private set
 
 	/**
+	 * Operator functions: + - * / += -= *= /= ! etc
+	 * plusAssign: +=
+	 * => `binaryTree += node`
+	 *
 	 * Inserts a new node at the correct position
 	 * @throws IllegalArgumentException if [node] is equal to an already existing element
 	 */
@@ -35,15 +47,33 @@ open class BinaryTree<D : Data>(
 		root.order()
 	}
 
+	/**
+	 * Example:
+	 * ```
+	 * [
+	 *     'hello: Greeting',
+	 *     'world: Synonym for earth',
+	 * ]
+	 * ```
+	 */
 	fun toString(notation: Notation) = order(notation).joinToString(
 		prefix = "[",
 		postfix = "\n]",
 		limit = 5
 	) { data -> "\n\t$data" }
+
 	override fun toString() = toString(Notation.IN)
 
 	/**
 	 * Prints a tree diagram.
+	 * Example:
+	 * ```
+	 *          b
+	 *    ┌─────┴─────┐
+	 *    a           d
+	 * ┌──┴──┐
+	 * c     e
+	 * ```
 	 * Source: https://stackoverflow.com/a/29704252/11485145
 	 */
 	fun print() {
@@ -64,7 +94,7 @@ open class BinaryTree<D : Data>(
 					next.add(null)
 					next.add(null)
 				} else {
-					val aa: String = n.data.key.cutOverflow(12)
+					val aa: String = n.data.key.cutOverflow(12u)
 					line.add(aa)
 					if (aa.length > widest) widest = aa.length
 					next.add(n.left)

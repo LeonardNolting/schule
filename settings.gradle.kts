@@ -9,5 +9,4 @@ rootProject.name = "schule"
 
 
 include(":liste")
-include(":binärbaum")
-include("binarytree")
+include(":binarytree")

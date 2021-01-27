@@ -1,4 +1,4 @@
-fun main () {
+fun main() {
 	val dictionary = Dictionary(
 		"Hello" to "Hello is a salutation or greeting in the English language. It is first attested in writing from 1826.",
 		"World" to "The world is the Earth and all life on it, including human civilization.",
@@ -14,12 +14,15 @@ fun main () {
 	dictionary.print()
 	println(dictionary)
 
-	val superstition = dictionary.find("Superstition")
-		?: error("The word superstition was not found.")
-
-	println(superstition)
+	dictionary.find("Superstition")?.also { (word, meaning) ->
+		println("Found word `$word`. Definition: `$meaning`")
+	} ?: error("The word superstition was not found.")
 }
 
-fun String.cutOverflow(maxLength: Int) =
-	if (length < maxLength) this
-	else substring(0..maxLength - 3) + Typography.ellipsis
+fun String.cutOverflow(maxLength: UInt, ellipsis: String = Typography.ellipsis.toString()): String {
+	require(maxLength >= ellipsis.length.toUInt()) {
+		"Max length needs to be at least as great as the given ellipsis length, because the ellipsis will replace the last letters of the text."
+	}
+	return if (length.toUInt() < maxLength) this
+	else substring(0, maxLength.toInt() - ellipsis.length) + ellipsis
+}
