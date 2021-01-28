@@ -13,6 +13,7 @@ fun main() {
 
 	dictionary.print()
 	println(dictionary)
+	BinaryTree<Word>().order(Notation.PRE).toString()
 
 	dictionary.find("Superstition")?.also { (word, meaning) ->
 		println("Found word `$word`. Definition: `$meaning`")
