@@ -22,6 +22,7 @@ class Dictionary(
 	) : this(words.map { (key, meaning) -> Word(key, meaning) })
 
 	override fun toString(): String {
-		return Notation.values().joinToString("\n") { it.name + ": " + toString(it) }
+		return "hallo"
+//		return Notation.values().joinToString("\n") { it.name + ": " + toString(it) }
 	}
 }

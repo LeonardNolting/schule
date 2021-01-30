@@ -1,8 +1,6 @@
-
 import java.util.*
 import kotlin.math.ceil
 import kotlin.math.floor
-
 
 open class BinaryTree<D : Data>(
 	data: List<D>
@@ -17,13 +15,13 @@ open class BinaryTree<D : Data>(
 	 */
 	constructor(vararg data: D) : this(data.toList())
 
+	var root: Element<D> = End()
+		private set
+
 	init {
 		@Suppress("LeakingThis")
 		for (singleData in data) this += singleData
 	}
-
-	var root: Element<D> = End()
-		private set
 
 	/**
 	 * Operator functions: + - * / += -= *= /= ! etc
