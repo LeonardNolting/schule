@@ -1,9 +1,9 @@
 class Node<D : Data>(
 	val data: D,
-) {
-	var left: Node<D>? = null
+) : Element<D>() {
+	var left: Element<D> = End()
 		private set
-	var right: Node<D>? = null
+	var right: Element<D> = End()
 		private set
 
 	override fun toString() = "Node(data=$data, left=$left, right=$right)"
@@ -19,6 +19,9 @@ class Node<D : Data>(
 		else right = right.refreshAndInsert(newNode)
 	}
 
+	override fun refreshAndInsert(newNode: Node<D>) =
+		this.apply { this += newNode }
+
 	/**
 	 * = in Funktionen:
 	 * Folgende Funktionen sind gleich:
@@ -29,18 +32,16 @@ class Node<D : Data>(
 	 * ```
 	 * @return Element of type [D] or null if no element with that key can be found.
 	 */
-	fun find(key: String): D? =
+	override fun find(key: String): D? =
 		when (key.compareTo(data.key).coerceIn(minimumValue = -1, maximumValue = 1)) {
-			-1   -> left?.find(key)
-			1    -> right?.find(key)
+			-1   -> left.find(key)
+			1    -> right.find(key)
 			else -> data
 		}
 
-	fun order(notation: Notation) = with(notation) { order() }
-}
+	val dataList get() = listOf(data)
+	val Notation.leftDataList get() = left.order(this)
+	val Notation.rightDataList get() = right.order(this)
 
-fun <D : Data> Node<D>?.refreshAndInsert(newData: D) = refreshAndInsert(Node(newData))
-fun <D : Data> Node<D>?.refreshAndInsert(newNode: Node<D>) =
-	this?.apply {
-		this += newNode
-	} ?: newNode
+	override fun order(notation: Notation) = with(notation) { order() }
+}

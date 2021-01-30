@@ -22,7 +22,7 @@ open class BinaryTree<D : Data>(
 		for (singleData in data) this += singleData
 	}
 
-	var root: Node<D>? = null
+	var root: Element<D> = End()
 		private set
 
 	/**
@@ -41,11 +41,9 @@ open class BinaryTree<D : Data>(
 		this += Node(data)
 	}
 
-	fun find(key: String) = root?.find(key)
+	fun find(key: String) = root.find(key)
 
-	fun order(notation: Notation) = with(notation) {
-		root.order()
-	}
+	fun order(notation: Notation) = root.order(notation)
 
 	/**
 	 * Example:
@@ -78,8 +76,8 @@ open class BinaryTree<D : Data>(
 	 */
 	fun print() {
 		val lines = mutableListOf<List<String?>>()
-		var level = mutableListOf<Node<D>?>()
-		var next = mutableListOf<Node<D>?>()
+		var level = mutableListOf<Element<D>?>()
+		var next = mutableListOf<Element<D>?>()
 		var nn = 1
 		var widest = 0
 
@@ -89,23 +87,23 @@ open class BinaryTree<D : Data>(
 			val line: MutableList<String?> = ArrayList()
 			nn = 0
 			for (n in level) {
-				if (n == null) {
-					line.add(null)
-					next.add(null)
-					next.add(null)
-				} else {
+				if (n is Node<D>) {
 					val aa: String = n.data.key.cutOverflow(12u)
 					line.add(aa)
 					if (aa.length > widest) widest = aa.length
 					next.add(n.left)
 					next.add(n.right)
-					if (n.left != null) nn++
-					if (n.right != null) nn++
+					if (n.left !is End<D>) nn++
+					if (n.right !is End<D>) nn++
+				} else {
+					line.add(null)
+					next.add(null)
+					next.add(null)
 				}
 			}
 			if (widest % 2 == 1) widest++
 			lines.add(line)
-			val tmp: MutableList<Node<D>?> = level
+			val tmp: MutableList<Element<D>?> = level
 			level = next
 			next = tmp
 			next.clear()
