@@ -10,3 +10,4 @@ rootProject.name = "schule"
 
 include(":liste")
 include(":binarytree")
+include(":graph")
