@@ -1,3 +1,27 @@
+import kotlin.math.pow
+
+class GraphMatrix(
+	private val maxKnoten: UInt,
+) {
+	private val knotenAnzahl get() = knoten.count { it != null }
+	private val knoten = Array<Knoten?>(maxKnoten.toDouble().pow(2).toInt()) { null }
+	private val adjMatrix = Array(maxKnoten.toInt()) { Array<Int?>(maxKnoten.toInt()) { null } }
+	fun fuegeKnotenEin(knoten: Knoten) {}
+	fun fuegeKnotenEin(bezeichnung: String) = fuegeKnotenEin(Knoten(bezeichnung))
+	fun fuegeKanteEin(von: String, nach: String, gewicht: Int) {
+		TODO()
+	}
+
+	fun getKantengewicht(von: String, nach: String): Int {
+		TODO()
+	}
+
+	fun ausgeben(breite: Int) {
+		TODO()
+	}
+}
+
+/*
 class Matrix(anzahlZeilen: Int, anzahlSpalten: Int) {
 	private val zeilen = Array(anzahlZeilen) {
 		Array<Int?>(anzahlSpalten) { null }
@@ -30,10 +54,10 @@ class Matrix(anzahlZeilen: Int, anzahlSpalten: Int) {
 	fun befuellen() {
 		var wert = 1
 		zeilen.withIndex().forEach { (index, zeile) ->
-			befuelleZeile(index, (zeile.indices).map { wert++ }.toTypedArray())
+			befuelleZeile(index, zeile.indices.map { wert++ }.toTypedArray())
 		}
 	}
 
 	override fun toString() =
 		zeilen.joinToString("\n") { spalten -> spalten.joinToString(", ") }
-}
+}*/

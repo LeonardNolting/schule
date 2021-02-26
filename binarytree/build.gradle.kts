@@ -18,6 +18,7 @@ dependencies {
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.jvmTarget = "13"
     kotlinOptions.freeCompilerArgs =
         listOf("-Xopt-in=kotlin.ExperimentalUnsignedTypes", "-Xopt-in=kotlin.ExperimentalStdlibApi")
 }

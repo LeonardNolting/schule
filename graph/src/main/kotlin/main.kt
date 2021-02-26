@@ -1,5 +1,7 @@
 fun main() {
-	println("Feld")
+	println(Knoten("hallo").getBezeichnung(2u))
+
+	/*println("Feld")
 	Feld(5).run {
 		befuellen()
 		ausgeben()
@@ -33,5 +35,5 @@ fun main() {
 	Matrix(3, 4).run {
 		befuellen()
 		println(this)
-	}
+	}*/
 }
