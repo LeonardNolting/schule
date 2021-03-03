@@ -1,12 +1,17 @@
-import kotlin.math.pow
-
 class GraphMatrix(
 	private val maxKnoten: UInt,
 ) {
 	private val knotenAnzahl get() = knoten.count { it != null }
-	private val knoten = Array<Knoten?>(maxKnoten.toDouble().pow(2).toInt()) { null }
+	private val knoten = Array<Knoten?>(maxKnoten.toInt()) { null }
 	private val adjMatrix = Array(maxKnoten.toInt()) { Array<Int?>(maxKnoten.toInt()) { null } }
-	fun fuegeKnotenEin(knoten: Knoten) {}
+	fun fuegeKnotenEin(knoten: Knoten) = this.knoten.run {
+		val indexDesLetztenKnotens = indexOfLast { it != null }
+		require(indexDesLetztenKnotens + 1 != size) {
+			"Es wurden schon die maximale Anzahl an Knoten in die Matrix eingefügt. Kann keine weiteren Knoten einfügen."
+		}
+		set(indexDesLetztenKnotens + 1, knoten)
+	}
+
 	fun fuegeKnotenEin(bezeichnung: String) = fuegeKnotenEin(Knoten(bezeichnung))
 	fun fuegeKanteEin(von: String, nach: String, gewicht: Int) {
 		TODO()

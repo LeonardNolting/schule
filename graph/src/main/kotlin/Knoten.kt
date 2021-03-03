@@ -1,4 +1,4 @@
-class Knoten(
+data class Knoten(
 	val bezeichnung: String
 ) {
 	fun getBezeichnung(breite: UInt) = bezeichnung
