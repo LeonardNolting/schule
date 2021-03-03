@@ -1,5 +1,5 @@
 class Knoten(
-	private val bezeichnung: String
+	val bezeichnung: String
 ) {
 	fun getBezeichnung(breite: UInt) = bezeichnung
 		.padEnd(breite.toInt(), ' ')

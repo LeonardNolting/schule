@@ -19,6 +19,9 @@ class GraphMatrix(
 	fun ausgeben(breite: Int) {
 		TODO()
 	}
+
+	fun getKnotenNr(bezeichnung: String) =
+		knoten.indexOfFirst { it?.bezeichnung == bezeichnung }
 }
 
 /*
