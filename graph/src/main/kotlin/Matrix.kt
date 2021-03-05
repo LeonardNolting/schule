@@ -1,12 +1,21 @@
+import kotlin.math.max
+
 class GraphMatrix(
-	private val maxKnoten: UInt,
+	private val maxKnotenAnzahl: UInt,
 ) {
 	private val knotenAnzahl get() = knoten.count { it != null }
-	private val knoten = Array<Knoten?>(maxKnoten.toInt()) { null }
-	private val adjMatrix = Array(maxKnoten.toInt()) { Array<Int?>(maxKnoten.toInt()) { null } }
+	private val knoten = Array<Knoten?>(maxKnotenAnzahl.toInt()) { null }
+	private val adjMatrix = Array(maxKnotenAnzahl.toInt()) { spalte ->
+		Array(maxKnotenAnzahl.toInt()) { zeile ->
+			if (zeile == spalte) 0 // von == zu
+			else -1
+		}
+	}
+	private val befuellt get() = knotenAnzahl == maxKnotenAnzahl.toInt()
+
 	fun fuegeKnotenEin(knoten: Knoten) = this.knoten.run {
 		val indexDesLetztenKnotens = indexOfLast { it != null }
-		require(indexDesLetztenKnotens + 1 != size) {
+		check(!befuellt) {
 			"Es wurden schon die maximale Anzahl an Knoten in die Matrix eingefügt. Kann keine weiteren Knoten einfügen."
 		}
 		set(indexDesLetztenKnotens + 1, knoten)
@@ -14,19 +23,46 @@ class GraphMatrix(
 
 	fun fuegeKnotenEin(bezeichnung: String) = fuegeKnotenEin(Knoten(bezeichnung))
 	fun fuegeKanteEin(von: String, nach: String, gewicht: Int) {
-		TODO()
+		val vonIndex = getKnotenNr(von)
+		val nachIndex = getKnotenNr(nach)
+
+		adjMatrix[vonIndex][nachIndex] = gewicht
+		adjMatrix[nachIndex][vonIndex] = gewicht
 	}
 
-	fun getKantengewicht(von: String, nach: String): Int {
-		TODO()
+	fun getKantengewicht(von: String, nach: String) =
+		adjMatrix[getKnotenNr(von)][getKnotenNr(nach)]
+
+	fun ausgeben() {
+		check(befuellt) { "Bitte befülle die Matrix erst vollständig, bevor du sie ausgibst." }
+
+		val breite = max(
+			adjMatrix.flatten().maxOf { it.toString().length }, // 10000
+			knoten.maxOf { it?.bezeichnung?.length ?: 0 } // Frankfurt
+		).toUInt()
+
+		fun write(string: String?) = print(" " + (string ?: "-").padded(breite) + " ")
+
+		// Kopfzeile
+		write("")
+		knoten.forEach { write(it?.bezeichnung) }
+		println()
+
+		// Zeilen
+		knoten.forEach {
+			write(it?.bezeichnung)
+			it?.let { adjMatrix[getKnotenNr(it)].forEach { gewicht -> write(gewicht.toString()) } }
+			println()
+		}
 	}
 
-	fun ausgeben(breite: Int) {
-		TODO()
-	}
+	private fun getKnotenNr(knoten: Knoten) = getKnotenNr(knoten.bezeichnung)
 
-	fun getKnotenNr(bezeichnung: String) =
-		knoten.indexOfFirst { it?.bezeichnung == bezeichnung }
+	private fun getKnotenNr(bezeichnung: String) =
+		knoten.indexOfFirst { it?.bezeichnung == bezeichnung }.let {
+			if (it == -1) error("Knoten mit Bezeichnung $bezeichnung existiert in dieser Matrix nicht.")
+			else it
+		}
 }
 
 /*
