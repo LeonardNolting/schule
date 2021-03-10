@@ -26,6 +26,8 @@ class GraphMatrix(
 		val vonIndex = getKnotenNr(von)
 		val nachIndex = getKnotenNr(nach)
 
+		require(vonIndex != nachIndex) { "Eine Strecke von a zu a ist immer 0." }
+
 		adjMatrix[vonIndex][nachIndex] = gewicht
 		adjMatrix[nachIndex][vonIndex] = gewicht
 	}
