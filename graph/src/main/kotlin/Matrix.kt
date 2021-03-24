@@ -1,3 +1,4 @@
+import java.util.*
 import kotlin.math.max
 
 class GraphMatrix(
@@ -13,12 +14,12 @@ class GraphMatrix(
 	}
 	private val befuellt get() = knotenAnzahl == maxKnotenAnzahl.toInt()
 
-	fun fuegeKnotenEin(knoten: Knoten) = this.knoten.run {
+	fun fuegeKnotenEin(neuerKnoten: Knoten) = knoten.run {
 		val indexDesLetztenKnotens = indexOfLast { it != null }
 		check(!befuellt) {
 			"Es wurden schon die maximale Anzahl an Knoten in die Matrix eingefügt. Kann keine weiteren Knoten einfügen."
 		}
-		set(indexDesLetztenKnotens + 1, knoten)
+		set(indexDesLetztenKnotens + 1, neuerKnoten)
 	}
 
 	fun fuegeKnotenEin(bezeichnung: String) = fuegeKnotenEin(Knoten(bezeichnung))
@@ -38,12 +39,16 @@ class GraphMatrix(
 	fun ausgeben() {
 		check(befuellt) { "Bitte befülle die Matrix erst vollständig, bevor du sie ausgibst." }
 
+		// Maximale Breite
 		val breite = max(
 			adjMatrix.flatten().maxOf { it.toString().length }, // 10000
 			knoten.maxOf { it?.bezeichnung?.length ?: 0 } // Frankfurt
-		).toUInt()
+		)
 
-		fun write(string: String?) = print(" " + (string ?: "-").padded(breite) + " ")
+		/**
+		 * Schreibe eine Zelle
+		 */
+		fun write(string: String?) = print(" " + ((string ?: "-") mitBreite breite) + " ")
 
 		// Kopfzeile
 		write("")
@@ -60,50 +65,27 @@ class GraphMatrix(
 
 	private fun getKnotenNr(knoten: Knoten) = getKnotenNr(knoten.bezeichnung)
 
+	@Throws(IllegalStateException::class)
 	private fun getKnotenNr(bezeichnung: String) =
-		knoten.indexOfFirst { it?.bezeichnung == bezeichnung }.let {
-			if (it == -1) error("Knoten mit Bezeichnung $bezeichnung existiert in dieser Matrix nicht.")
-			else it
+		knoten.indexOfFirst { it?.bezeichnung == bezeichnung }.let { meinKnoten ->
+			if (meinKnoten == -1) throw Exception("Knoten mit Bezeichnung $bezeichnung existiert in dieser Matrix nicht.")
+			else meinKnoten
 		}
+
+	// 2021-03-24
+
+	private val stack = Stack<Int>()
+
+	fun tiefensuche(start: String) = besuchen(getKnotenNr(start))
+
+	private fun besuchen(start: Int) {
+		val vorgaenger = stack.peek()
+		val nachbarn = adjMatrix[start].filter { it > 0 }
+		val nochNichtBesuchteNachbarn = nachbarn.filterNot { stack.contains(it) }
+		if (nochNichtBesuchteNachbarn.isEmpty()) besuchen(vorgaenger)
+		else {
+			stack.push(start)
+			besuchen(nochNichtBesuchteNachbarn.first())
+		}
+	}
 }
-
-/*
-class Matrix(anzahlZeilen: Int, anzahlSpalten: Int) {
-	private val zeilen = Array(anzahlZeilen) {
-		Array<Int?>(anzahlSpalten) { null }
-	}
-
-	fun befuelleZeile(zeilenIndex: Int, werte: Array<Int>) = zeilen[zeilenIndex].apply {
-		require(zeilenIndex < zeilen.size) { "Kann $zeilenIndex. Zeile nicht befüllen, da diese nicht existiert. Vorhandene Zeilen: ${zeilen.size}" }
-		require(werte.size == size) { "Die Anzahl der Werte muss dem angegebenem Wert entsprechen. Gegeben: ${werte.size}; Erwartet: $size" }
-
-		for ((spaltenIndex, _) in this.withIndex())
-			zeilen[zeilenIndex][spaltenIndex] = werte[spaltenIndex]
-	}
-
-	fun befuellen(werte: Array<Array<Int>>) = zeilen.apply {
-		require(werte.size == size) { "Die Anzahl der Listen aus Werten muss dem angegebenem Wert entsprechen. Gegeben: ${werte.size}; Erwartet: $size" }
-
-		for ((zeilenIndex, _) in werte.withIndex()) befuelleZeile(zeilenIndex, werte[zeilenIndex])
-	}
-
-	fun befuellen(werte: Array<Int>) {
-		require(zeilen.isNotEmpty()) { "Kann Matrix mit 0 Zeilen nicht befüllen." }
-
-		val erwarteteAnzahlWerte = zeilen.size * zeilen[0].size
-		require(werte.size == erwarteteAnzahlWerte) { "Anzahl Werte passt nicht. Gegeben: ${werte.size}; Erwartet: $erwarteteAnzahlWerte" }
-
-		werte.toList().chunked(zeilen[0].size).withIndex()
-			.forEach { (index, werte) -> befuelleZeile(index, werte.toTypedArray()) }
-	}
-
-	fun befuellen() {
-		var wert = 1
-		zeilen.withIndex().forEach { (index, zeile) ->
-			befuelleZeile(index, zeile.indices.map { wert++ }.toTypedArray())
-		}
-	}
-
-	override fun toString() =
-		zeilen.joinToString("\n") { spalten -> spalten.joinToString(", ") }
-}*/
