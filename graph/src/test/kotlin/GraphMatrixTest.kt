@@ -30,11 +30,6 @@ internal class GraphMatrixTest {
 		"M" to "RO" to 60
 	)
 
-	@AfterAll
-	fun tearDown() {
-		matrix.ausgeben()
-	}
-
 	@Test
 	fun fuegeKnotenEin() {
 		for (stadt in staedte)
@@ -47,5 +42,10 @@ internal class GraphMatrixTest {
 			matrix.fuegeKanteEin(orte.first, orte.second, gewicht)
 			assertEquals(matrix.getKantengewicht(orte.first, orte.second), gewicht)
 		}
+	}
+
+	@AfterAll
+	fun tearDown() {
+		matrix.ausgeben()
 	}
 }
